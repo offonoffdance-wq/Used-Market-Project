@@ -38,74 +38,82 @@ flowchart LR
 
 ## 🗂 담당 도메인 ERD
 
+담당 테이블을 **상품·찜**과 **신고·제재** 두 도메인으로 나눠 표기했습니다. (핵심 컬럼만, 전체 스키마는 아래 접이식 참고)
+
+**① 상품·찜 도메인**
+
 ```mermaid
 erDiagram
-    MEMBER ||--o{ PRODUCT : "판매자"
-    PRODUCT_GROUP ||--o{ PRODUCT : "카테고리"
-    PRODUCT_GROUP |o--o{ PRODUCT : "브랜드(선택)"
+    MEMBER ||--o{ PRODUCT : "판매"
+    PRODUCT_GROUP ||--o{ PRODUCT : "카테고리·브랜드"
     PRODUCT_GROUP |o--o{ PRODUCT_GROUP : "상위 그룹"
-    PRODUCT ||--o{ PRODUCT_IMAGE : "다중 이미지"
+    PRODUCT ||--o{ PRODUCT_IMAGE : "1:N 이미지"
     MEMBER ||--o{ WISHLIST : "찜"
     PRODUCT ||--o{ WISHLIST : "찜 대상"
-    MEMBER ||--o{ REPORT : "신고자"
-    MEMBER ||--o{ REPORT : "피신고자"
-    MEMBER ||--o{ MEMBER_PENALTY : "제재 이력"
-    REPORT |o--o{ MEMBER_PENALTY : "제재 근거"
 
     PRODUCT {
         bigint product_id PK
-        varchar seller_id FK "판매자"
-        bigint category_id FK "카테고리(필수)"
-        bigint brand_id FK "브랜드(선택)"
-        varchar title
-        int price
-        int shipping_fee
-        enum condition_code "S-D 등급"
-        enum product_status "ON_SALE, SOLD, DELETED"
-        int view_count
+        varchar seller_id FK
+        bigint category_id FK
+        bigint brand_id FK
+        enum product_status "ON_SALE·SOLD·DELETED"
         int wishlist_count
-        varchar deleted_reason "소프트 삭제 사유"
     }
     PRODUCT_GROUP {
         bigint group_id PK
-        enum group_type "CATEGORY, BRAND"
-        bigint parent_id FK "상위 그룹(자기참조)"
-        varchar code UK "예: CLOTHES_TOP, NIKE"
-        varchar name
-        varchar size_type
+        enum group_type "CATEGORY·BRAND"
+        bigint parent_id FK
     }
     PRODUCT_IMAGE {
         bigint image_id PK
         bigint product_id FK
-        varchar image_url
-        int sort_order "0 = 대표 이미지"
+        int sort_order "0=대표"
     }
     WISHLIST {
         bigint wishlist_id PK
-        varchar member_id FK "UNIQUE(member, product)"
-        bigint product_id FK "UNIQUE(member, product)"
+        varchar member_id FK
+        bigint product_id FK
     }
+```
+
+**② 신고·제재 도메인 (관리자)**
+
+```mermaid
+erDiagram
+    MEMBER ||--o{ REPORT : "신고자"
+    MEMBER ||--o{ REPORT : "피신고자"
+    MEMBER ||--o{ MEMBER_PENALTY : "제재 대상"
+    REPORT |o--o{ MEMBER_PENALTY : "제재 근거"
+
     REPORT {
-        varchar report_id PK "RPT_001 형태"
+        varchar report_id PK
         varchar reporter_id FK
         varchar target_member_id FK
-        enum reason_code "FRAUD, MISLEADING_INFO, PROHIBITED_ITEM, ETC"
-        varchar detail
-        enum report_status "APPROVED, REJECTED, DONE"
-        varchar processed_reason
-        datetime processed_at
+        enum reason_code "FRAUD·PROHIBITED_ITEM·ETC"
+        enum report_status "APPROVED·REJECTED·DONE"
     }
     MEMBER_PENALTY {
         bigint penalty_id PK
         varchar member_id FK
-        varchar report_id FK "근거 신고(선택)"
-        enum penalty_type "WARNING, SUSPEND, BAN"
-        int penalty_days "3, 7, 30 (정지 시)"
-        varchar reason
-        datetime starts_at
-        datetime ends_at
+        varchar report_id FK
+        enum penalty_type "WARNING·SUSPEND·BAN"
+        int penalty_days
     }
 ```
+
+<details>
+<summary>📋 전체 컬럼 상세 스키마 (펼치기)</summary>
+
+| 테이블 | 주요 컬럼 |
+|---|---|
+| **products** | product_id(PK), seller_id·category_id·brand_id(FK), title, price, shipping_fee, condition_code(S~D), product_status(ON_SALE/SOLD/DELETED), view_count, wishlist_count, deleted_reason, deleted_at |
+| **product_groups** | group_id(PK), group_type(CATEGORY/BRAND), parent_id(FK, 자기참조), code(UK), name, size_type |
+| **product_images** | image_id(PK), product_id(FK), image_url, sort_order(0=대표) |
+| **wishlists** | wishlist_id(PK), member_id·product_id(FK), UNIQUE(member_id, product_id) |
+| **reports** | report_id(PK, RPT_001), reporter_id·target_member_id(FK), reason_code(FRAUD/MISLEADING_INFO/PROHIBITED_ITEM/ETC), detail, report_status(APPROVED/REJECTED/DONE), processed_reason, processed_at |
+| **member_penalties** | penalty_id(PK), member_id·report_id(FK), penalty_type(WARNING/SUSPEND/BAN), penalty_days(3/7/30), reason, starts_at, ends_at |
+
+</details>
 
 ---
 
