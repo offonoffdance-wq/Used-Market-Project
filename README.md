@@ -191,12 +191,6 @@ erDiagram
 - JPA 연관관계에서 언제 쿼리가 몇 번 나가는지, 페치 조인으로 어떻게 줄이는지 직접 확인하면서 감을 잡았습니다.
 - 동시성은 코드만 봐선 안 보이고, "두 요청이 겹치면?"을 그려 봐야 문제가 보인다는 걸 배웠습니다.
 - 삭제·상태 관리를 소프트 삭제로 설계하면 데이터 추적과 복구가 훨씬 수월하다는 걸 알게 됐습니다.
-
-**아쉬운 점 (다시 하면 이렇게)**
-- 신고 상태의 첫 값이 `APPROVED`인데, 사실 "접수됨" 의미라 이름이 직관과 어긋납니다. 다시 짠다면 `RECEIVED`로 바꾸겠습니다.
-- 인기순 가중치 3배는 감으로 정한 값입니다. 실제 클릭·구매 전환 데이터로 근거를 만드는 게 맞았다고 봅니다.
-- 테스트 코드를 작성하지 못했습니다. N+1이나 동시성 같은 부분은 특히 테스트로 검증했어야 했다고 생각합니다.
-
 ---
 
 ## 프로젝트 구조
@@ -214,21 +208,4 @@ backend/src/main/java/com/nailed/
 │   ├── order/       # 주문 (팀)
 │   └── ...
 └── common/          # 공통 — entity, enums, response, exception, util (팀 공통 규격)
-```
-
-## 실행 방법
-
-MySQL에 스키마가 미리 있어야 합니다. JPA 설정이 `ddl-auto=validate`라 테이블을 자동 생성하지 않으므로, `nailed_db` 데이터베이스와 테이블을 먼저 만들어 둔 뒤 실행합니다.
-
-```bash
-# Backend
-cd backend
-cp src/main/resources/application-example.properties src/main/resources/application.properties
-# 위 파일에 DB 접속 정보와 JWT 시크릿을 채운다
-./mvnw spring-boot:run
-
-# Frontend
-cd frontend
-npm install
-npm run dev
 ```
