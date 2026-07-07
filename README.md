@@ -147,11 +147,6 @@ erDiagram
 | POST | `/api/products/{id}/wishlist` | 찜 등록 |
 | DELETE | `/api/products/{id}/wishlist` | 찜 취소 |
 | GET | `/api/members/mypage/wishlist` | 내 찜 목록 |
-| GET | `/api/admin/products` | (관리자) 상태별 상품 목록 |
-| PATCH | `/api/admin/products/{id}/delete` | (관리자) 상품 블라인드 |
-| PATCH | `/api/admin/products/{id}/restore` | (관리자) 상품 복구 |
-| PATCH | `/api/admin/reports/{id}/reject` | (관리자) 신고 반려 |
-| PATCH | `/api/admin/reports/{id}/penalize` | (관리자) 신고 제재 |
 
 ### 기능별로 신경 쓴 점
 
