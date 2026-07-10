@@ -1,13 +1,13 @@
 # 중고거래 플랫폼 Nailed
 
-의류·잡화 중심의 개인 간(C2C) 중고거래 플랫폼입니다. 3인 팀 프로젝트로, 상품 등록부터 주문·결제·정산·CS까지 이어지는 흐름을 도메인별로 나눠 만들었습니다. 저는 이 중에서 **상품(Product)과 찜(Wishlist) 도메인 전체, 그리고 관리자 상품·신고 처리의 백엔드**를 맡았습니다.
+의류·잡화 중심의 개인 간(C2C) 중고거래 플랫폼입니다. 
 
 - 배포 주소: http://13.125.205.120/
 - 개발 기간: 2026.04 ~ 2026.06
 - 팀 구성: 3인 (도메인별 분담)
 - 사용 기술: Java 21, Spring Boot 3.5, Spring Data JPA, Spring Security + JWT, MySQL, AWS EC2, Nginx
 
-> 이 저장소는 팀 프로젝트의 백엔드·프론트 소스를 포트폴리오용으로 한곳에 모아 재구성한 것입니다. 실제 개발 커밋 히스토리(제가 작업한 상품 도메인 커밋 포함)는 팀 원본 백엔드 저장소에서 확인하실 수 있습니다 → [byeongminjeong49-ui/nailed_BE](https://github.com/byeongminjeong49-ui/nailed_BE)
+> 이 저장소는 팀 프로젝트의 백엔드·프론트 소스를 포트폴리오용으로 한곳에 모아 재구성한 것입니다. 실제 개발 커밋 히스토리는 팀 원본 백엔드 저장소에서 확인하실 수 있습니다 → [byeongminjeong49-ui/nailed_BE](https://github.com/byeongminjeong49-ui/nailed_BE)
 
 ## 목차
 
@@ -24,7 +24,7 @@
 
 ## 제가 맡은 부분
 
-상품·찜 도메인은 테이블 설계부터 API까지 혼자 맡아서 만들었고, 관리자 기능 중에서는 상품 관리와 신고 처리의 API·비즈니스 로직을 담당했습니다. (관리자 화면 자체는 팀에서 함께 만들었고, 저는 그 화면이 호출하는 서버 쪽을 담당했습니다.)
+상품·찜 도메인은 테이블 설계부터 API를 담당해서 만들었고, 관리자 기능 중에서는 상품 관리와 신고 처리의 API·비즈니스 로직을 담당했습니다.
 
 | 도메인 | 한 일 | 특히 고민한 것 |
 |---|---|---|
@@ -243,50 +243,49 @@ int decrementWishlistCount(@Param("productId") Long productId);
 
 ## 프로젝트 구조
 
-담당한 백엔드 패키지 위주로 정리하면 다음과 같습니다. 상품·찜 도메인은 파일 단위까지, 나머지는 패키지 단위로만 표기했습니다.
-
+담당한 백엔드 패키지 위주로 정리하면 다음과 같습니다. 
 ```
 📁 backend/src/main/java/com/nailed/
 ├── 📁 web/
 │   ├── 📁 product/                     # 상품 도메인 (담당)
 │   │   ├── 📁 controller/
-│   │   │   └── ☕ ProductController.java
+│   │   │   └── 📁 ProductController.java
 │   │   ├── 📁 service/
-│   │   │   └── ☕ ProductService.java
+│   │   │   └── 📁 ProductService.java
 │   │   ├── 📁 entity/
-│   │   │   ├── ☕ Product.java
-│   │   │   ├── ☕ ProductGroup.java     # 카테고리·브랜드 (자기참조 계층)
-│   │   │   ├── ☕ ProductImage.java
-│   │   │   └── ☕ ProductPrdSequence.java
+│   │   │   ├── 📁 Product.java
+│   │   │   ├── 📁 ProductGroup.java     # 카테고리·브랜드 (자기참조 계층)
+│   │   │   ├── 📁 ProductImage.java
+│   │   │   └── 📁 ProductPrdSequence.java
 │   │   ├── 📁 repository/
-│   │   │   ├── ☕ ProductRepository.java        # 검색·페치조인·벌크 UPDATE
-│   │   │   ├── ☕ ProductGroupRepository.java
-│   │   │   ├── ☕ ProductImageRepository.java
-│   │   │   └── ☕ ProductPrnSequenceRepository.java
+│   │   │   ├── 📁 ProductRepository.java        # 검색·페치조인·벌크 UPDATE
+│   │   │   ├── 📁 ProductGroupRepository.java
+│   │   │   ├── 📁 ProductImageRepository.java
+│   │   │   └── 📁 ProductPrnSequenceRepository.java
 │   │   └── 📁 dto/
-│   │       ├── ☕ ProductRequest.java
-│   │       ├── ☕ ProductResponse.java
-│   │       └── ☕ ProductSearchCondition.java   # 복합 검색 조건 객체
+│   │       ├── 📁 ProductRequest.java
+│   │       ├── 📁 ProductResponse.java
+│   │       └── 📁 ProductSearchCondition.java   # 복합 검색 조건 객체
 │   │
 │   ├── 📁 wishlist/                    # 찜 도메인 (담당)
 │   │   ├── 📁 controller/
-│   │   │   └── ☕ WishlistController.java
+│   │   │   └── 📁 WishlistController.java
 │   │   ├── 📁 service/
-│   │   │   └── ☕ WishlistService.java
+│   │   │   └── 📁 WishlistService.java
 │   │   ├── 📁 entity/
-│   │   │   └── ☕ Wishlist.java
+│   │   │   └── 📁 Wishlist.java
 │   │   └── 📁 repository/
-│   │       └── ☕ WishlistRepository.java
+│   │       └── 📁 WishlistRepository.java
 │   │
 │   ├── 📁 admin/                       # 관리자 (상품·신고 처리 담당)
 │   │   ├── 📁 controller/
-│   │   │   ├── ☕ AdminProductController.java   # 담당
-│   │   │   ├── ☕ AdminReportController.java    # 담당
-│   │   │   └── ☕ ...                           # 대시보드·회원·주문·문의 (팀)
+│   │   │   ├── 📁 AdminProductController.java   # 담당
+│   │   │   ├── 📁 AdminReportController.java    # 담당
+│   │   │   └── 📁 ...                           # 대시보드·회원·주문·문의 (팀)
 │   │   └── 📁 service/
-│   │       ├── ☕ AdminProductService.java      # 담당
-│   │       ├── ☕ AdminReportService.java       # 담당
-│   │       └── ☕ ...
+│   │       ├── 📁 AdminProductService.java      # 담당
+│   │       ├── 📁 AdminReportService.java       # 담당
+│   │       └── 📁 ...
 │   │
 │   ├── 📁 report/                      # 신고 도메인 (담당)
 │   ├── 📁 member/                      # 회원 (팀)
