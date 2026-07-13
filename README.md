@@ -5,7 +5,6 @@
 - 배포 주소: http://13.125.205.120/
 - 개발 기간: 2026.04 ~ 2026.06
 - 팀 구성: 3인 (도메인별 분담)
-- 사용 기술: Java 21, Spring Boot 3.5, Spring Data JPA, Spring Security + JWT, MySQL, AWS EC2, Nginx
 
 > 이 저장소는 팀 프로젝트의 백엔드·프론트 소스를 포트폴리오용으로 한곳에 모아 재구성 했습니다. 실제 개발 커밋 히스토리는 팀 원본 백엔드 저장소에서 확인할 수 있습니다 → [byeongminjeong49-ui/nailed_BE](https://github.com/byeongminjeong49-ui/nailed_BE)
 
