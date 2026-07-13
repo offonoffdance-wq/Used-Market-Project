@@ -22,8 +22,6 @@
 
 ## 기술 스택
 
-[담당 영역 백엔드]
-
 | 구분 | 기술 |
 |---|---|
 | Backend | Java 21, Spring Boot 3.5, Spring Data JPA (Hibernate), Spring Security + JWT, MySQL |
