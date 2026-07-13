@@ -144,7 +144,7 @@ erDiagram
 
 
 <details>
-<summary>주요 API</summary>
+<h2><summary>주요 API</summary></h2>
 
 | 메서드 | 경로 | 설명 |
 |---|---|---|
