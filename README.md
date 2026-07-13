@@ -143,7 +143,8 @@ erDiagram
 | 관리자 신고 | 신고 반려·제재 처리, 제재(penalty) 연동 생성 |
 
 
-<details> ## 주요 API 
+<details>
+<summary>주요 API</summary>
 
 | 메서드 | 경로 | 설명 |
 |---|---|---|
