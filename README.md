@@ -210,19 +210,17 @@ erDiagram
 
 상세 조회 전용으로 `findByIdWithFetch`를 만들어 필요한 연관 엔티티를 `JOIN FETCH`로 한 번에 가져오게 했습니다. 브랜드는 없을 수 있는 값이라 `LEFT JOIN FETCH`로 두어, 브랜드 없는 상품이 결과에서 빠지지 않게 했습니다.
 
-```java
-// 상세 페이지 전용 - seller / category 계층 / brand 를 한 번에 fetch
-@Query("SELECT p FROM Product p " +
-       "JOIN FETCH p.seller " +
-       "JOIN FETCH p.category c " +
-       "LEFT JOIN FETCH c.parent cp " +   // 카테고리 상위
-       "LEFT JOIN FETCH cp.parent " +     // 상위의 상위
-       "LEFT JOIN FETCH p.brand " +       // 브랜드는 null 허용 → LEFT
-       "WHERE p.productId = :id AND p.productStatus != :deleted")
-Optional<Product> findByIdWithFetch(@Param("id") Long id, @Param("deleted") ProductStatus deleted);
+```sql
+SELECT p FROM Product p
+  JOIN FETCH p.seller
+  JOIN FETCH p.category c
+  LEFT JOIN FETCH c.parent          -- 상위 카테고리
+  LEFT JOIN FETCH c.parent.parent   -- 상위의 상위 (brand 는 null 허용 → LEFT)
+  LEFT JOIN FETCH p.brand
+ WHERE p.productId = :id AND p.productStatus <> :deleted
 ```
 
-다만 이미지 목록·판매자 리뷰 통계·찜 여부는 이 쿼리에 합치지 않고 따로 뒀습니다. 이미지는 1:N이라 같이 조인하면 상품 행이 이미지 수만큼 늘어나고, 리뷰 통계와 찜 여부는 성격이 다른 집계라 한 쿼리에 묶는 게 오히려 손해라고 봤습니다.
+이미지 목록·리뷰 통계·찜 여부는 이 쿼리에 합치지 않고 따로 뒀습니다. 이미지는 1:N이라 같이 조인하면 상품 행이 이미지 수만큼 늘어나고, 나머지는 성격이 다른 집계라 한 쿼리에 묶는 게 오히려 손해라고 봤습니다.
 
 </details>
 
@@ -231,7 +229,7 @@ Optional<Product> findByIdWithFetch(@Param("id") Long id, @Param("deleted") Prod
 
 <br>
 
-상품과 판매자·카테고리 계층·브랜드를 가져오는 쿼리가 한 번으로 줄었습니다. N+1은 코드만 봐서는 잘 안 보이고 `show-sql`로 실제 쿼리 수를 확인해야 드러난다는 점, 그리고 페치 조인이 항상 답은 아니어서 컬렉션이나 집계는 분리하는 편이 낫다는 기준을 얻었습니다.
+연관 엔티티를 가져오는 쿼리가 한 번으로 줄었습니다. 페치 조인이 항상 답은 아니어서, 컬렉션이나 집계는 오히려 분리하는 편이 낫다는 기준을 얻었습니다.
 
 </details>
 
@@ -262,21 +260,14 @@ Optional<Product> findByIdWithFetch(@Param("id") Long id, @Param("deleted") Prod
 
 <br>
 
-값을 읽어 더하는 대신 `@Modifying` 벌크 UPDATE로 `SET count = count + 1`을 DB에서 바로 계산하게 바꿨습니다. 더하는 일을 DB가 한 번에 처리하니, 동시 요청이 겹쳐도 값이 유실되지 않습니다.
+값을 읽어 더하는 대신 `@Modifying` 벌크 UPDATE로 증감을 DB에서 바로 계산하게 바꿨습니다. 더하는 일을 DB가 한 번에 처리하니, 동시 요청이 겹쳐도 값이 유실되지 않습니다.
 
-```java
-// 찜수 -1 : DB에서 직접 감산 → 동시 찜취소 Lost Update 방지
-// wishlist_count > 0 가드로 음수 방지
-// flushAutomatically: clear 전에 pending 찜 DELETE를 먼저 DB 반영 (DELETE 유실 방지)
-// clearAutomatically: 벌크 UPDATE 후 영속성 컨텍스트를 DB와 동기화
-@Modifying(flushAutomatically = true, clearAutomatically = true)
-@Transactional
-@Query("UPDATE Product p SET p.wishlistCount = p.wishlistCount - 1 " +
-       "WHERE p.productId = :productId AND p.wishlistCount > 0")
-int decrementWishlistCount(@Param("productId") Long productId);
+```sql
+UPDATE Product p SET p.wishlistCount = p.wishlistCount - 1
+ WHERE p.productId = :productId AND p.wishlistCount > 0   -- 0 미만 방지
 ```
 
-벌크 연산이라 신경 쓸 점이 몇 가지 더 있었습니다. 벌크 UPDATE는 영속성 컨텍스트를 우회하므로 캐시에 남은 옛 값과 DB 값이 어긋나, `clearAutomatically`로 실행 후 컨텍스트를 비웠습니다. 그런데 찜 취소는 찜 DELETE 뒤에 카운트를 줄이는데, DELETE가 아직 flush되지 않은 채 컨텍스트를 비우면 DELETE가 통째로 사라져서, `flushAutomatically`로 clear 전에 먼저 flush하도록 했습니다. 감소 쿼리에는 `wishlist_count > 0` 조건을 걸어 음수로 내려가지 않게 했습니다.
+벌크 UPDATE는 영속성 컨텍스트를 거치지 않아, 실행 뒤 `clearAutomatically`로 컨텍스트를 비워 캐시와 DB 값을 맞췄습니다. 다만 찜 취소는 `찜 DELETE → 카운트 -1` 순인데 DELETE가 flush되기 전에 컨텍스트를 비우면 DELETE가 사라지므로, `flushAutomatically`로 비우기 전에 먼저 반영하게 했습니다.
 
 </details>
 
@@ -285,16 +276,14 @@ int decrementWishlistCount(@Param("productId") Long productId);
 
 <br>
 
-읽기·수정·저장 세 단계가 UPDATE 한 문장으로 줄어, 요청이 동시에 들어와도 카운트가 유실되지 않습니다. 동시성 문제는 정상 시나리오만 봐서는 드러나지 않고 두 요청이 겹치는 상황을 가정해야 보인다는 것, 그리고 벌크 연산은 빠른 대신 영속성 컨텍스트를 우회하므로 flush·clear 타이밍을 직접 챙겨야 한다는 걸 알게 됐습니다.
+읽기·수정·저장 세 단계가 UPDATE 한 문장으로 줄어, 요청이 동시에 들어와도 카운트가 유실되지 않습니다. 동시성 문제는 정상 시나리오만 봐서는 드러나지 않고, 두 요청이 겹치는 순간을 가정해야 보인다는 걸 배웠습니다.
 
 </details>
 
 ---
 
-## 배운 점
+## 그 외 회고
 
-- JPA 연관관계에서 쿼리가 언제 몇 번 발생하는지, 페치 조인으로 이를 어떻게 줄이는지 직접 확인하며 이해했습니다.
-- 동시성 문제는 코드만 봐서는 드러나지 않고, 두 요청이 겹치는 상황을 가정해야 보인다는 것을 배웠습니다.
 - 소프트 삭제로 상태를 관리하면 데이터 추적과 복구가 용이하다는 것을 확인했습니다.
 - 인기순 가중치처럼 임의로 정한 값은, 다음에는 실제 조회·찜 데이터를 근거로 결정하려 합니다.
 
