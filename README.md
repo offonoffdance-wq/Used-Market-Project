@@ -142,7 +142,8 @@ erDiagram
 | 관리자 상품 | 상태별 목록 조회, 부적절 상품 블라인드·복구 |
 | 관리자 신고 | 신고 반려·제재 처리, 제재(penalty) 연동 생성 |
 
-<summary> 주요 API </summary>
+<details>
+## 주요 API 
 
 | 메서드 | 경로 | 설명 |
 |---|---|---|
@@ -159,6 +160,7 @@ erDiagram
 | POST | /api/products/{id}/wishlist | 찜 등록 |
 | DELETE | /api/products/{id}/wishlist | 찜 취소 |
 | GET | /api/members/mypage/wishlist | 내 찜 목록 |
+</details>
 
 ### 기능별로 신경 쓴 점
 
