@@ -146,19 +146,19 @@ erDiagram
 
 | 메서드 | 경로 | 설명 |
 |---|---|---|
-| GET | `/api/products` | 상품 목록 (카테고리·가격·사이즈·컨디션 필터, 페이징) |
-| GET | `/api/products/search` | 키워드 검색 |
-| GET | `/api/products/{id}` | 상품 상세 |
-| POST | `/api/products/image-upload` | 이미지 임시 업로드 (다중) |
-| POST | `/api/products` | 상품 등록 |
-| PUT | `/api/products/{id}` | 상품 수정 |
-| DELETE | `/api/products/{id}` | 상품 소프트 삭제 |
-| POST | `/api/products/{id}/view` | 조회수 증가 |
-| GET | `/api/products/popular` | 인기 TOP (가중치 정렬) |
-| GET | `/api/products/{id}/related` | 연관 상품 |
-| POST | `/api/products/{id}/wishlist` | 찜 등록 |
-| DELETE | `/api/products/{id}/wishlist` | 찜 취소 |
-| GET | `/api/members/mypage/wishlist` | 내 찜 목록 |
+| GET | /api/products | 상품 목록 (카테고리·가격·사이즈·컨디션 필터, 페이징) |
+| GET | /api/products/search | 키워드 검색 |
+| GET | /api/products/{id} | 상품 상세 |
+| POST | /api/products/image-upload | 이미지 임시 업로드 (다중) |
+| POST | /api/products | 상품 등록 |
+| PUT | /api/products/{id} | 상품 수정 |
+| DELETE | /api/products/{id} | 상품 소프트 삭제 |
+| POST | /api/products/{id}/view | 조회수 증가 |
+| GET | /api/products/popular | 인기 TOP (가중치 정렬) |
+| GET | /api/products/{id}/related | 연관 상품 |
+| POST | /api/products/{id}/wishlist | 찜 등록 |
+| DELETE | /api/products/{id}/wishlist | 찜 취소 |
+| GET | /api/members/mypage/wishlist | 내 찜 목록 |
 
 ### 기능별로 신경 쓴 점
 
