@@ -15,7 +15,7 @@
 
 | 도메인 | 한 일 | 특히 고민한 것 |
 |---|---|---|
-| 상품 | CRUD, 복합 조건 검색·정렬, 이미지 1:N 관리, 홈 상품 조회 | 늘어나는 검색 조건, [상세 조회 N+1](#상품-상세에서-쿼리가-너무-많이-나가던-문제) |
+| 상품 | CRUD, 복합 조건 검색·정렬, 이미지 1:N 관리, 홈 상품 조회 | 늘어나는 검색 조건, [상세 N+1](#상품-상세에서-쿼리가-너무-많이-나가던-문제) · [목록 썸네일 N+1](#상품-목록에서-썸네일-때문에-다시-n1이-나던-문제) |
 | 찜 | 찜 등록·취소, 마이페이지 찜 목록, 상품 찜 수 동기화 | [동시 요청에서 카운트 유실](#조회수찜-수가-동시-요청에서-어긋날-수-있던-문제) |
 | 관리자 | 상품 블라인드·복구, 신고 반려·제재 처리 | 소프트 삭제, 신고 상태 전이 방어 |
 
@@ -179,35 +179,96 @@ erDiagram
 
 ## 트러블슈팅
 
+각 문제를 문제점 / 원인 / 해결 과정 / 결과·배운 점 네 단계로 나눠 접이식으로 정리했습니다.
+
 ### 상품 상세에서 쿼리가 너무 많이 나가던 문제
 
-상품 상세를 열면 판매자·카테고리·브랜드가 모두 지연 로딩이라, 각 정보를 참조할 때마다 SELECT가 별도로 실행됐습니다. 특히 카테고리는 상위 카테고리를 다시 참조하는 계층 구조여서, 전체 경로(`맨즈웨어 > 상의 > 티셔츠`)를 만드는 동안 깊이만큼 쿼리가 추가로 발생했습니다. 전형적인 N+1 문제입니다.
+상품 상세를 열 때 연관 엔티티를 전부 페치 조인으로 합치지 않고 일부는 따로 뒀는데, 그 판단 근거를 아래에 적어 뒀습니다.
 
-`show-sql` 로그로 쿼리 발생 횟수를 확인한 뒤, 상세 조회 전용으로 `findByIdWithFetch`를 정의해 필요한 연관 엔티티를 `JOIN FETCH`로 한 번에 조회하도록 변경했습니다. 브랜드는 null이 허용되는 값이므로 `LEFT JOIN FETCH`를 적용해, 브랜드가 없는 상품이 결과에서 누락되지 않게 했습니다.
+<details>
+<summary>1. 문제점</summary>
+
+<br>
+
+상품 상세를 열면 판매자·카테고리·브랜드가 모두 지연 로딩이라, 각 정보를 참조할 때마다 SELECT가 별도로 나갔습니다. 카테고리는 `맨즈웨어 > 상의 > 티셔츠`처럼 상위 카테고리를 자기참조로 타고 올라가는 계층 구조여서, 전체 경로를 만드는 동안 깊이만큼 쿼리가 더 붙었습니다.
+
+</details>
+
+<details>
+<summary>2. 원인</summary>
+
+<br>
+
+지연 로딩과 자기참조 계층이 겹쳐 생긴 N+1이었습니다. 지연 로딩이라 연관 값을 실제로 꺼내 쓰는 순간에야 쿼리가 나가고, 카테고리는 상위로 올라갈 때마다 SELECT가 한 번씩 더 붙습니다. `show-sql`을 켜고 상세를 열 때 쿼리가 몇 번 나가는지 직접 세어 보며 원인을 좁혔습니다.
+
+</details>
+
+<details>
+<summary>3. 해결 과정</summary>
+
+<br>
+
+상세 조회 전용으로 `findByIdWithFetch`를 만들어 필요한 연관 엔티티를 `JOIN FETCH`로 한 번에 가져오게 했습니다. 브랜드는 없을 수 있는 값이라 `LEFT JOIN FETCH`로 두어, 브랜드 없는 상품이 결과에서 빠지지 않게 했습니다.
 
 ```java
-// 상세 페이지 전용 - seller/category 계층/brand 한 번에 fetch
+// 상세 페이지 전용 - seller / category 계층 / brand 를 한 번에 fetch
 @Query("SELECT p FROM Product p " +
        "JOIN FETCH p.seller " +
        "JOIN FETCH p.category c " +
-       "LEFT JOIN FETCH c.parent cp " +
-       "LEFT JOIN FETCH cp.parent " +
-       "LEFT JOIN FETCH p.brand " +
+       "LEFT JOIN FETCH c.parent cp " +   // 카테고리 상위
+       "LEFT JOIN FETCH cp.parent " +     // 상위의 상위
+       "LEFT JOIN FETCH p.brand " +       // 브랜드는 null 허용 → LEFT
        "WHERE p.productId = :id AND p.productStatus != :deleted")
 Optional<Product> findByIdWithFetch(@Param("id") Long id, @Param("deleted") ProductStatus deleted);
 ```
 
-적용 후 상품과 연관 엔티티(판매자·카테고리 계층·브랜드)를 가져오는 쿼리가 한 번으로 줄었습니다. 상세 응답에 함께 필요한 이미지 목록·판매자 리뷰 통계·찜 여부는 성격이 다른 조회라 별도 쿼리로 유지했습니다.
+다만 이미지 목록·판매자 리뷰 통계·찜 여부는 이 쿼리에 합치지 않고 따로 뒀습니다. 이미지는 1:N이라 같이 조인하면 상품 행이 이미지 수만큼 늘어나고, 리뷰 통계와 찜 여부는 성격이 다른 집계라 한 쿼리에 묶는 게 오히려 손해라고 봤습니다.
+
+</details>
+
+<details>
+<summary>4. 결과 및 배운 점</summary>
+
+<br>
+
+상품과 판매자·카테고리 계층·브랜드를 가져오는 쿼리가 한 번으로 줄었습니다. N+1은 코드만 봐서는 잘 안 보이고 `show-sql`로 실제 쿼리 수를 확인해야 드러난다는 점, 그리고 페치 조인이 항상 답은 아니어서 컬렉션이나 집계는 분리하는 편이 낫다는 기준을 얻었습니다.
+
+</details>
+
+---
 
 ### 조회수·찜 수가 동시 요청에서 어긋날 수 있던 문제
 
-초기에는 엔티티를 조회해 값을 +1 한 뒤 다시 저장하는 방식이었습니다. 이 경우 두 요청이 같은 값을 읽으면 나중 저장이 앞의 증가를 덮어써, 카운트가 유실될 수 있습니다(lost update).
+<details>
+<summary>1. 문제점</summary>
 
-조회와 저장을 분리하지 않고 `@Modifying`으로 `UPDATE ... SET view_count = view_count + 1`을 직접 실행해, 증감을 DB에서 원자적으로 처리하도록 변경했습니다. 감소 연산에는 `wishlist_count > 0` 조건을 걸어 음수를 방지했고, 벌크 연산 이후 영속성 컨텍스트가 DB 상태와 어긋나지 않도록 `clearAutomatically`를 적용했습니다. 찜 취소의 경우 아직 flush되지 않은 찜 DELETE가 컨텍스트 초기화로 유실될 수 있어 `flushAutomatically`를 함께 지정했습니다.
+<br>
+
+초기 구현은 엔티티를 조회해 값을 +1 한 뒤 다시 저장하는 방식이었습니다. 두 요청이 거의 동시에 들어오면 둘 다 같은 값을 읽고 각자 +1 해서 저장하기 때문에, 한 번의 증가가 사라지고 카운트가 실제보다 작게 남을 수 있었습니다.
+
+</details>
+
+<details>
+<summary>2. 원인</summary>
+
+<br>
+
+`조회 → 계산 → 저장`이 한 덩어리로 처리되지 않아서 생기는 Lost Update(갱신 유실)입니다. 두 요청이 같은 값을 읽는 순간, 나중에 저장한 쪽이 먼저 저장한 쪽의 증가분을 덮어씁니다. 값을 코드에서 읽어 더하는 방식인 한 이 틈은 없어지지 않습니다.
+
+</details>
+
+<details>
+<summary>3. 해결 과정</summary>
+
+<br>
+
+값을 읽어 더하는 대신 `@Modifying` 벌크 UPDATE로 `SET count = count + 1`을 DB에서 바로 계산하게 바꿨습니다. 더하는 일을 DB가 한 번에 처리하니, 동시 요청이 겹쳐도 값이 유실되지 않습니다.
 
 ```java
-// 찜수 -1 (0 미만 방지 가드 유지, 동시 찜취소 Lost Update 방지)
+// 찜수 -1 : DB에서 직접 감산 → 동시 찜취소 Lost Update 방지
+// wishlist_count > 0 가드로 음수 방지
 // flushAutomatically: clear 전에 pending 찜 DELETE를 먼저 DB 반영 (DELETE 유실 방지)
+// clearAutomatically: 벌크 UPDATE 후 영속성 컨텍스트를 DB와 동기화
 @Modifying(flushAutomatically = true, clearAutomatically = true)
 @Transactional
 @Query("UPDATE Product p SET p.wishlistCount = p.wishlistCount - 1 " +
@@ -215,7 +276,77 @@ Optional<Product> findByIdWithFetch(@Param("id") Long id, @Param("deleted") Prod
 int decrementWishlistCount(@Param("productId") Long productId);
 ```
 
-읽기·수정·저장의 세 단계가 UPDATE 한 문장으로 축소됐고, 요청이 동시에 들어와도 DB가 증감을 처리하므로 카운트가 유실되지 않습니다.
+벌크 연산이라 신경 쓸 점이 몇 가지 더 있었습니다. 벌크 UPDATE는 영속성 컨텍스트를 우회하므로 캐시에 남은 옛 값과 DB 값이 어긋나, `clearAutomatically`로 실행 후 컨텍스트를 비웠습니다. 그런데 찜 취소는 찜 DELETE 뒤에 카운트를 줄이는데, DELETE가 아직 flush되지 않은 채 컨텍스트를 비우면 DELETE가 통째로 사라져서, `flushAutomatically`로 clear 전에 먼저 flush하도록 했습니다. 감소 쿼리에는 `wishlist_count > 0` 조건을 걸어 음수로 내려가지 않게 했습니다.
+
+</details>
+
+<details>
+<summary>4. 결과 및 배운 점</summary>
+
+<br>
+
+읽기·수정·저장 세 단계가 UPDATE 한 문장으로 줄어, 요청이 동시에 들어와도 카운트가 유실되지 않습니다. 동시성 문제는 정상 시나리오만 봐서는 드러나지 않고 두 요청이 겹치는 상황을 가정해야 보인다는 것, 그리고 벌크 연산은 빠른 대신 영속성 컨텍스트를 우회하므로 flush·clear 타이밍을 직접 챙겨야 한다는 걸 알게 됐습니다.
+
+</details>
+
+---
+
+### 상품 목록에서 썸네일 때문에 다시 N+1이 나던 문제
+
+상세는 페치 조인으로 해결했지만 목록에서는 같은 방식을 쓸 수 없었습니다.
+
+<details>
+<summary>1. 문제점</summary>
+
+<br>
+
+홈·검색·마이페이지 찜 목록처럼 상품을 여러 개 뿌리는 화면에서, 카드마다 대표 이미지를 하나씩 조회하느라 목록 크기만큼 SELECT가 반복됐습니다. 상세에서 겪은 N+1이 목록에서 형태만 바꿔 다시 나타난 셈입니다.
+
+</details>
+
+<details>
+<summary>2. 원인</summary>
+
+<br>
+
+이미지는 상품과 1:N 관계라, 목록 쿼리에 이미지를 페치 조인하면 상품 행이 이미지 수만큼 중복되고 페이징도 어긋납니다. 상세에서 통했던 한 번에 페치 조인하는 방식을 목록에는 그대로 쓸 수 없는 구조였습니다.
+
+</details>
+
+<details>
+<summary>3. 해결 과정</summary>
+
+<br>
+
+상품을 페이징으로 먼저 조회한 뒤, 그 상품 ID들을 모아 대표 이미지(sort_order=0)만 `IN` 절로 한 번에 가져와 `productId → imageUrl` Map으로 만들어 응답에 넣었습니다. 홈·검색·찜 목록에서 공통으로 쓰도록 리포지토리 default 메서드로 뺐습니다.
+
+```java
+// 목록 N+1 방지: 여러 상품의 대표 이미지(sort_order=0)를 IN 절로 한 번에 조회
+@Query("SELECT pi FROM ProductImage pi " +
+       "WHERE pi.product.productId IN :productIds AND pi.sortOrder = 0")
+List<ProductImage> findThumbnailsByProductIds(@Param("productIds") List<Long> productIds);
+
+// productId → 대표 이미지 URL 맵 (여러 Service 공통 사용)
+default Map<Long, String> buildThumbnailMap(List<Long> productIds) {
+    if (productIds.isEmpty()) return Map.of();
+    Map<Long, String> map = new HashMap<>();
+    for (ProductImage img : findThumbnailsByProductIds(productIds)) {
+        map.putIfAbsent(img.getProduct().getProductId(), img.getImageUrl());
+    }
+    return map;
+}
+```
+
+</details>
+
+<details>
+<summary>4. 결과 및 배운 점</summary>
+
+<br>
+
+목록 이미지 조회가 한 번의 IN 조회로 줄었습니다. 같은 N+1이라도 단건 상세는 페치 조인, 다건 목록은 IN 배치 조회로 해법이 갈린다는 걸 정리했고, 공통 로직을 default 메서드로 빼 두니 목록 화면이 늘어도 그대로 재사용할 수 있었습니다.
+
+</details>
 
 ---
 
