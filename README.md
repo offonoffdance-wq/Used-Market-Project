@@ -160,7 +160,6 @@ erDiagram
 | GET | /api/members/mypage/wishlist | 내 찜 목록 |
 
 </details>
-
 ### 기능별로 신경 쓴 점
 
 <h3>**검색 조건의 확장을 전제로 설계했습니다.**</h3>
