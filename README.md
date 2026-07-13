@@ -144,7 +144,7 @@ erDiagram
 
 
 <h3><details>
-<summary>주요 API</summary>
+<summary>주요 API</summary></h3>
 | 메서드 | 경로 | 설명 |
 |---|---|---|
 | GET | /api/products | 상품 목록 (카테고리·가격·사이즈·컨디션 필터, 페이징) |
@@ -160,7 +160,7 @@ erDiagram
 | POST | /api/products/{id}/wishlist | 찜 등록 |
 | DELETE | /api/products/{id}/wishlist | 찜 취소 |
 | GET | /api/members/mypage/wishlist | 내 찜 목록 |
-</details></h3>
+</details>
 
 ### 기능별로 신경 쓴 점
 
