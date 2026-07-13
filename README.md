@@ -15,7 +15,7 @@
 
 | 도메인 | 한 일 | 특히 고민한 것 |
 |---|---|---|
-| 상품 | CRUD, 복합 조건 검색·정렬, 이미지 1:N 관리, 홈 상품 조회 | 늘어나는 검색 조건, [상세 N+1](#상품-상세에서-쿼리가-너무-많이-나가던-문제) · [목록 썸네일 N+1](#상품-목록에서-썸네일-때문에-다시-n1이-나던-문제) |
+| 상품 | CRUD, 복합 조건 검색·정렬, 이미지 1:N 관리, 홈 상품 조회 | 늘어나는 검색 조건, [상세 조회 N+1](#상품-상세에서-쿼리가-너무-많이-나가던-문제) |
 | 찜 | 찜 등록·취소, 마이페이지 찜 목록, 상품 찜 수 동기화 | [동시 요청에서 카운트 유실](#조회수찜-수가-동시-요청에서-어긋날-수-있던-문제) |
 | 관리자 | 상품 블라인드·복구, 신고 반려·제재 처리 | 소프트 삭제, 신고 상태 전이 방어 |
 
@@ -286,65 +286,6 @@ int decrementWishlistCount(@Param("productId") Long productId);
 <br>
 
 읽기·수정·저장 세 단계가 UPDATE 한 문장으로 줄어, 요청이 동시에 들어와도 카운트가 유실되지 않습니다. 동시성 문제는 정상 시나리오만 봐서는 드러나지 않고 두 요청이 겹치는 상황을 가정해야 보인다는 것, 그리고 벌크 연산은 빠른 대신 영속성 컨텍스트를 우회하므로 flush·clear 타이밍을 직접 챙겨야 한다는 걸 알게 됐습니다.
-
-</details>
-
----
-
-### 상품 목록에서 썸네일 때문에 다시 N+1이 나던 문제
-
-상세는 페치 조인으로 해결했지만 목록에서는 같은 방식을 쓸 수 없었습니다.
-
-<details>
-<summary>1. 문제점</summary>
-
-<br>
-
-홈·검색·마이페이지 찜 목록처럼 상품을 여러 개 뿌리는 화면에서, 카드마다 대표 이미지를 하나씩 조회하느라 목록 크기만큼 SELECT가 반복됐습니다. 상세에서 겪은 N+1이 목록에서 형태만 바꿔 다시 나타난 셈입니다.
-
-</details>
-
-<details>
-<summary>2. 원인</summary>
-
-<br>
-
-이미지는 상품과 1:N 관계라, 목록 쿼리에 이미지를 페치 조인하면 상품 행이 이미지 수만큼 중복되고 페이징도 어긋납니다. 상세에서 통했던 한 번에 페치 조인하는 방식을 목록에는 그대로 쓸 수 없는 구조였습니다.
-
-</details>
-
-<details>
-<summary>3. 해결 과정</summary>
-
-<br>
-
-상품을 페이징으로 먼저 조회한 뒤, 그 상품 ID들을 모아 대표 이미지(sort_order=0)만 `IN` 절로 한 번에 가져와 `productId → imageUrl` Map으로 만들어 응답에 넣었습니다. 홈·검색·찜 목록에서 공통으로 쓰도록 리포지토리 default 메서드로 뺐습니다.
-
-```java
-// 목록 N+1 방지: 여러 상품의 대표 이미지(sort_order=0)를 IN 절로 한 번에 조회
-@Query("SELECT pi FROM ProductImage pi " +
-       "WHERE pi.product.productId IN :productIds AND pi.sortOrder = 0")
-List<ProductImage> findThumbnailsByProductIds(@Param("productIds") List<Long> productIds);
-
-// productId → 대표 이미지 URL 맵 (여러 Service 공통 사용)
-default Map<Long, String> buildThumbnailMap(List<Long> productIds) {
-    if (productIds.isEmpty()) return Map.of();
-    Map<Long, String> map = new HashMap<>();
-    for (ProductImage img : findThumbnailsByProductIds(productIds)) {
-        map.putIfAbsent(img.getProduct().getProductId(), img.getImageUrl());
-    }
-    return map;
-}
-```
-
-</details>
-
-<details>
-<summary>4. 결과 및 배운 점</summary>
-
-<br>
-
-목록 이미지 조회가 한 번의 IN 조회로 줄었습니다. 같은 N+1이라도 단건 상세는 페치 조인, 다건 목록은 IN 배치 조회로 해법이 갈린다는 걸 정리했고, 공통 로직을 default 메서드로 빼 두니 목록 화면이 늘어도 그대로 재사용할 수 있었습니다.
 
 </details>
 
