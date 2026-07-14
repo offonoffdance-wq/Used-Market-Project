@@ -181,7 +181,6 @@ erDiagram
   
 <summary><h3>전체 컬럼 상세 스키마</h3></summary>
 | 테이블 | 주요 컬럼 |
-|---|---|
 | products | product_id(PK), seller_id·category_id·brand_id(FK), title, price, shipping_fee, condition_code(S~D), product_status(ON_SALE/SOLD/DELETED), view_count, wishlist_count, deleted_reason, deleted_at |
 | product_groups | group_id(PK), group_type(CATEGORY/BRAND), parent_id(FK, 자기참조), code(UK), name, size_type |
 | product_images | image_id(PK), product_id(FK), image_url, sort_order(0=대표) |
