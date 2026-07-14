@@ -140,6 +140,67 @@ erDiagram
 | 관리자 상품 | 상태별 목록 조회, 부적절 상품 블라인드·복구 |
 | 관리자 신고 | 신고 반려·제재 처리, 제재(penalty) 연동 생성 |
 
+## 프로젝트 구조
+<details>
+<summary><h3>프로젝트 구조 보기</h3></summary>
+
+```
+📁 backend/src/main/java/com/nailed/
+├── 📁 web/
+│   ├── 📁 product/                     # 상품 도메인 (담당)
+│   │   ├── 📁 controller/
+│   │   │   └── 📁 ProductController.java
+│   │   ├── 📁 service/
+│   │   │   └── 📁 ProductService.java
+│   │   ├── 📁 entity/
+│   │   │   ├── 📁 Product.java
+│   │   │   ├── 📁 ProductGroup.java     # 카테고리·브랜드 (자기참조 계층)
+│   │   │   ├── 📁 ProductImage.java
+│   │   │   └── 📁 ProductPrdSequence.java
+│   │   ├── 📁 repository/
+│   │   │   ├── 📁 ProductRepository.java        # 검색·페치조인·벌크 UPDATE
+│   │   │   ├── 📁 ProductGroupRepository.java
+│   │   │   ├── 📁 ProductImageRepository.java
+│   │   │   └── 📁 ProductPrnSequenceRepository.java
+│   │   └── 📁 dto/
+│   │       ├── 📁 ProductRequest.java
+│   │       ├── 📁 ProductResponse.java
+│   │       └── 📁 ProductSearchCondition.java   # 복합 검색 조건 객체
+│   │
+│   ├── 📁 wishlist/                    # 찜 도메인 (담당)
+│   │   ├── 📁 controller/
+│   │   │   └── 📁 WishlistController.java
+│   │   ├── 📁 service/
+│   │   │   └── 📁 WishlistService.java
+│   │   ├── 📁 entity/
+│   │   │   └── 📁 Wishlist.java
+│   │   └── 📁 repository/
+│   │       └── 📁 WishlistRepository.java
+│   │
+│   ├── 📁 admin/                       # 관리자 (상품·신고 처리 담당)
+│   │   ├── 📁 controller/
+│   │   │   ├── 📁 AdminProductController.java   # 담당
+│   │   │   ├── 📁 AdminReportController.java    # 담당
+│   │   │   └── 📁 ...                           # 대시보드·회원·주문·문의 (팀)
+│   │   └── 📁 service/
+│   │       ├── 📁 AdminProductService.java      # 담당
+│   │       ├── 📁 AdminReportService.java       # 담당
+│   │       └── 📁 ...
+│   │
+│   ├── 📁 report/                      # 신고 도메인 (담당)
+│   ├── 📁 member/                      # 회원 (팀)
+│   ├── 📁 order/                       # 주문 (팀)
+│   └── 📁 ...
+│
+└── 📁 common/                          # 팀 공통 규격
+    ├── 📁 entity/
+    ├── 📁 enums/
+    ├── 📁 exception/
+    ├── 📁 response/
+    └── 📁 util/
+```
+</details>
+
 <details>
 <summary><h2>주요 API</h2></summary>
 
@@ -285,61 +346,4 @@ UPDATE Product p SET p.wishlistCount = p.wishlistCount - 1
 
 ---
 
-## 프로젝트 구조
 
-담당한 백엔드 패키지 위주로 정리하면 다음과 같습니다. 
-```
-📁 backend/src/main/java/com/nailed/
-├── 📁 web/
-│   ├── 📁 product/                     # 상품 도메인 (담당)
-│   │   ├── 📁 controller/
-│   │   │   └── 📁 ProductController.java
-│   │   ├── 📁 service/
-│   │   │   └── 📁 ProductService.java
-│   │   ├── 📁 entity/
-│   │   │   ├── 📁 Product.java
-│   │   │   ├── 📁 ProductGroup.java     # 카테고리·브랜드 (자기참조 계층)
-│   │   │   ├── 📁 ProductImage.java
-│   │   │   └── 📁 ProductPrdSequence.java
-│   │   ├── 📁 repository/
-│   │   │   ├── 📁 ProductRepository.java        # 검색·페치조인·벌크 UPDATE
-│   │   │   ├── 📁 ProductGroupRepository.java
-│   │   │   ├── 📁 ProductImageRepository.java
-│   │   │   └── 📁 ProductPrnSequenceRepository.java
-│   │   └── 📁 dto/
-│   │       ├── 📁 ProductRequest.java
-│   │       ├── 📁 ProductResponse.java
-│   │       └── 📁 ProductSearchCondition.java   # 복합 검색 조건 객체
-│   │
-│   ├── 📁 wishlist/                    # 찜 도메인 (담당)
-│   │   ├── 📁 controller/
-│   │   │   └── 📁 WishlistController.java
-│   │   ├── 📁 service/
-│   │   │   └── 📁 WishlistService.java
-│   │   ├── 📁 entity/
-│   │   │   └── 📁 Wishlist.java
-│   │   └── 📁 repository/
-│   │       └── 📁 WishlistRepository.java
-│   │
-│   ├── 📁 admin/                       # 관리자 (상품·신고 처리 담당)
-│   │   ├── 📁 controller/
-│   │   │   ├── 📁 AdminProductController.java   # 담당
-│   │   │   ├── 📁 AdminReportController.java    # 담당
-│   │   │   └── 📁 ...                           # 대시보드·회원·주문·문의 (팀)
-│   │   └── 📁 service/
-│   │       ├── 📁 AdminProductService.java      # 담당
-│   │       ├── 📁 AdminReportService.java       # 담당
-│   │       └── 📁 ...
-│   │
-│   ├── 📁 report/                      # 신고 도메인 (담당)
-│   ├── 📁 member/                      # 회원 (팀)
-│   ├── 📁 order/                       # 주문 (팀)
-│   └── 📁 ...
-│
-└── 📁 common/                          # 팀 공통 규격
-    ├── 📁 entity/
-    ├── 📁 enums/
-    ├── 📁 exception/
-    ├── 📁 response/
-    └── 📁 util/
-```
