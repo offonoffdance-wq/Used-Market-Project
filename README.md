@@ -37,7 +37,7 @@
 ## 기술 스택
 
 <details>
-  <summary><h3>기술 스택 한눈에 보기</h3></summary>
+  <summary><h3>기술 스택 모음</h3></summary>
 
 <img width="1140" alt="Nailed 기술 스택 한눈에 보기" src="docs/images/tech-stack.png" />
 
