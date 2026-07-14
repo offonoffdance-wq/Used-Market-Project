@@ -192,8 +192,8 @@ erDiagram
 </details>
 
 <br/>
-
-## ✨ 주요 기능
+<details>
+## <summary>주요 기능</summary>
 
 ### `01` 회원
 - **회원가입 / 로그인** — 회원가입, 로그인 유지, 비밀번호 재설정
