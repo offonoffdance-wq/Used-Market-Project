@@ -10,7 +10,7 @@
 > 서로를 알지 못하는 사람들이 **믿고 거래할 수 있는 환경**을 설계했습니다.  
 > 흩어진 중고 거래를 하나의 신뢰할 수 있는 공간으로 모으는 것, 바로 Nailed 입니다.
 
-> 실제 개발 커밋 히스토리는 팀 원본 백엔드 저장소에서 확인할 수 있습니다 → [byeongminjeong49-ui/nailed_BE](https://github.com/byeongminjeong49-ui/nailed_BE)
+> 실제 개발 커밋 히스토리 팀 원본 백엔드 저장소 → [byeongminjeong49-ui/nailed_BE](https://github.com/byeongminjeong49-ui/nailed_BE)
 
 ### 🌐 배포 주소
 - [http://13.125.205.120/](http://13.125.205.120/)
