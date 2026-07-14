@@ -40,15 +40,7 @@
 <details>
   <summary><h3>기술 스택 한눈에 보기</h3></summary>
 
-| 구분 | 기술 |
-|------|------|
-| Language | Java, JavaScript |
-| Backend | Spring Data JPA (Hibernate), Spring Security, JWT, REST API |
-| Frontend | React |
-| Database | MySQL, DBeaver |
-| Infra & Deploy | AWS, NGINX, Docker |
-| 형상관리 & 협업 | Git, GitHub, Sourcetree |
-| 기타 도구 | FileZilla |
+<img width="1140" alt="Nailed 기술 스택 한눈에 보기" src="docs/images/tech-stack.png" />
 
 </details>
 
