@@ -12,8 +12,7 @@
 
 > 실제 개발 커밋 히스토리 팀 원본 백엔드 저장소 → [byeongminjeong49-ui/nailed_BE](https://github.com/byeongminjeong49-ui/nailed_BE)
 
-### 🌐 배포 주소
-- [http://13.125.205.120/](http://13.125.205.120/)
+### 🌐 배포 주소 [http://13.125.205.120/](http://13.125.205.120/)
 
 ### 🗓️ 프로젝트 개요
 | 항목 | 내용 |
