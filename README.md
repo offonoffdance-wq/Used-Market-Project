@@ -40,7 +40,7 @@
 <details>
   <summary><h3>기술 스택 한눈에 보기</h3></summary>
 
-<img width="1140" alt="Nailed 기술 스택 한눈에 보기" src="docs/images/tech-nailed.png" />
+<img width="1140" alt="Nailed 기술 스택 한눈에 보기" src="docs/images/tech-snack.png" />
 
 </details>
 
