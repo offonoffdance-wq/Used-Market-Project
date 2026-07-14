@@ -193,7 +193,7 @@ erDiagram
 
 <br/>
 <details>
-## <summary>주요 기능</summary>
+<summary><h3>주요 기능</h3></summary>
 
 ### `01` 회원
 - **회원가입 / 로그인** — 회원가입, 로그인 유지, 비밀번호 재설정
