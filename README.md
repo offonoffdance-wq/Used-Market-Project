@@ -173,7 +173,7 @@ erDiagram
 ```
 
 <details>
-<summary>전체 컬럼 상세 스키마 (펼치기)</summary>
+<summary><h3>전체 컬럼 상세 스키마</h3></summary>
 
 | 테이블 | 주요 컬럼 |
 |---|---|
