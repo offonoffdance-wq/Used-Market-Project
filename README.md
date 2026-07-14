@@ -113,10 +113,6 @@ backend/src/main/java/com/nailed/
 
 ## 담당 도메인 ERD
 
-제가 맡은 테이블을 한눈에 보기 쉽게 **상품·찜**과 **신고·제재** 두 묶음으로 나눴습니다. 여기엔 핵심 컬럼만 넣었고, 전체 컬럼은 맨 아래 접이식으로 정리해 뒀습니다.
-
-상품·찜 도메인
-
 ```mermaid
 erDiagram
     MEMBER ||--o{ PRODUCT : "판매"
