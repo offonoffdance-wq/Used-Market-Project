@@ -1,6 +1,6 @@
 # Nailed(네일드) - C2C 중고거래 플랫폼
 
-## 📑 프로젝트 소개
+## 프로젝트 소개
 
 > **Nailed**는 옷장 속에 잠든 의류와 잡화를 필요한 사람에게 연결하는 **중고거래 플랫폼**입니다.  
 > 판매자는 상품 사진과 정보를 등록하는 것만으로 손쉽게 물건을 내놓을 수 있고,  
@@ -12,9 +12,9 @@
 
 > 실제 개발 커밋 히스토리 팀 원본 백엔드 저장소 → [byeongminjeong49-ui/nailed_BE](https://github.com/byeongminjeong49-ui/nailed_BE)
 
-### 🌐 배포 주소 -> [http://13.125.205.120/](http://13.125.205.120/)
+### 배포 주소 -> [http://13.125.205.120/](http://13.125.205.120/)
 
-### 🗓️ 프로젝트 개요
+### 프로젝트 개요
 | 항목 | 내용 |
 |------|------|
 | 기간 | 2026.04 ~ 2026.06 |
@@ -22,7 +22,7 @@
 
 <br/>
 
-## 🙋 담당 역할 (My Role)
+## 담당 역할 (My Role)
 
 상품·찜 도메인은 테이블 설계와 API를 제작했고, 관리자 기능 중 상품 관리와 신고 처리를 담당했습니다.
 
@@ -34,7 +34,7 @@
 
 <br/>
 
-## ⚙️ 기술 스택
+## 기술 스택
 
 <details>
   <summary><h3>기술 스택 한눈에 보기</h3></summary>
@@ -43,37 +43,37 @@
 
 </details>
 
-### 📌 언어 (Language)
+### 언어 (Language)
 [![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/docs/Web/JavaScript)
 
-### 🖥️ 백엔드 (Backend)
+### 백엔드 (Backend)
 [![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white)](https://spring.io/projects/spring-data-jpa)
 [![Spring Security](https://img.shields.io/badge/Spring%20Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
 [![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 [![REST API](https://img.shields.io/badge/REST%20API-02569B?style=for-the-badge&logo=fastapi&logoColor=white)](https://developer.mozilla.org/docs/Glossary/REST)
 
-### 🎨 프론트엔드 (Frontend)
+### 프론트엔드 (Frontend)
 [![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 
-### 🗄️ 데이터베이스 (Database)
+### 데이터베이스 (Database)
 [![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![DBeaver](https://img.shields.io/badge/DBeaver-382923?style=for-the-badge&logo=dbeaver&logoColor=white)](https://dbeaver.io/)
 
-### 🚀 배포 & 인프라 (Infra & Deploy)
+### 배포 & 인프라 (Infra & Deploy)
 [![AWS](https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white)](https://aws.amazon.com/)
 [![NGINX](https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=nginx&logoColor=white)](https://nginx.org/)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![FileZilla](https://img.shields.io/badge/FileZilla-BF0000?style=for-the-badge&logo=filezilla&logoColor=white)](https://filezilla-project.org/)
 
-### 🔧 형상관리 & 협업 (Collaboration)
+### 형상관리 & 협업 (Collaboration)
 [![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)](https://git-scm.com/)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/)
 [![Sourcetree](https://img.shields.io/badge/Sourcetree-0052CC?style=for-the-badge&logo=sourcetree&logoColor=white)](https://www.sourcetreeapp.com/)
 
 <br/>
 
-## 🚧 시스템 구성
+## 시스템 구성
 
 ```mermaid
 flowchart LR
@@ -90,7 +90,29 @@ flowchart LR
 
 <br/>
 
-## 🗃️ 담당 도메인 ERD
+## 프로젝트 구조
+
+<details>
+  <summary><h3>프로젝트 구조 보기</h3></summary>
+
+```
+backend/src/main/java/com/nailed/
+├── web/
+│   ├── product/       # 상품 도메인 - CRUD, 검색·정렬, 이미지 (담당)
+│   ├── wishlist/      # 찜 도메인 - 등록/취소, 찜 수 동기화 (담당)
+│   ├── admin/         # 관리자 - 상품 블라인드, 신고 처리 (담당 영역 포함)
+│   ├── report/        # 신고 도메인 (담당)
+│   ├── member/        # 회원 (팀)
+│   ├── order/         # 주문 (팀)
+│   └── ...
+└── common/            # 응답 포맷, 예외 처리 등 공통 규격
+```
+
+</details>
+
+<br/>
+
+## 담당 도메인 ERD
 
 제가 맡은 테이블을 한눈에 보기 쉽게 **상품·찜**과 **신고·제재** 두 묶음으로 나눴습니다. 여기엔 핵심 컬럼만 넣었고, 전체 컬럼은 맨 아래 접이식으로 정리해 뒀습니다.
 
@@ -171,7 +193,7 @@ erDiagram
 
 <br/>
 
-## ✨ 구현 내용
+## 구현 내용
 
 | 영역 | 구현 내용 |
 |---|---|
@@ -228,7 +250,7 @@ erDiagram
 
 <br/>
 
-## 💣 트러블 슈팅
+## 트러블 슈팅
 
 ### 상품 상세에서 쿼리가 너무 많이 나가던 문제
 
@@ -324,27 +346,5 @@ UPDATE Product p SET p.wishlistCount = p.wishlistCount - 1
 <br>
 
 읽기·수정·저장 세 단계가 UPDATE 한 문장으로 줄어, 요청이 동시에 들어와도 카운트가 유실되지 않습니다. 동시성 문제는 정상 시나리오만 봐서는 드러나지 않고, 두 요청이 겹치는 순간을 가정해야 보인다는 걸 배웠습니다.
-
-</details>
-
-<br/>
-
-## 🏗️ 프로젝트 구조
-
-<details>
-  <summary><h3>프로젝트 구조 보기</h3></summary>
-
-```
-backend/src/main/java/com/nailed/
-├── web/
-│   ├── product/       # 상품 도메인 - CRUD, 검색·정렬, 이미지 (담당)
-│   ├── wishlist/      # 찜 도메인 - 등록/취소, 찜 수 동기화 (담당)
-│   ├── admin/         # 관리자 - 상품 블라인드, 신고 처리 (담당 영역 포함)
-│   ├── report/        # 신고 도메인 (담당)
-│   ├── member/        # 회원 (팀)
-│   ├── order/         # 주문 (팀)
-│   └── ...
-└── common/            # 응답 포맷, 예외 처리 등 공통 규격
-```
 
 </details>
