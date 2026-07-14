@@ -201,8 +201,10 @@ erDiagram
 ```
 </details>
 
+## 주요 API
+
 <details>
-<summary><h2>주요 API</h2></summary>
+<summary><h2>Backend API</h2></summary>
 
 | 메서드 | 경로 | 설명 |
 |---|---|---|
