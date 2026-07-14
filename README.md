@@ -1,36 +1,90 @@
-# 중고거래 플랫폼 Nailed
+# Nailed(네일드) - 의류·잡화 특화 C2C 중고거래 플랫폼
 
-의류·잡화 중심의 개인 간(C2C) 중고거래 플랫폼입니다. 
+## 📑 프로젝트 소개
 
-- 배포 주소: http://13.125.205.120/
-- 개발 기간: 2026.04 ~ 2026.06
-- 팀 구성: 3인 (도메인별 분담)
+> <mark>**Nailed**</mark>는 옷장 속에 잠든 의류와 잡화를 필요한 사람에게 연결하는 **개인 간(C2C) 중고거래 플랫폼**입니다.  
+> 판매자는 상품 사진과 정보를 등록하는 것만으로 손쉽게 물건을 내놓을 수 있고,  
+> 구매자는 카테고리, 가격대, 사이즈, 컨디션까지 **원하는 조건을 좁혀가며** 딱 맞는 상품을 찾을 수 있습니다.  
+> 단순 조회수를 넘어 찜과 관심도를 반영한 **인기순 추천**, 여러 장의 상품 이미지를 안전하게 관리하는 **이미지 처리**,  
+> 부적절한 상품과 악성 이용자를 걸러내는 **관리자 검수 체계**까지 —  
+> 서로를 알지 못하는 사람들이 **믿고 거래할 수 있는 환경**을 설계했습니다.  
+> 흩어진 중고 거래를 하나의 신뢰할 수 있는 공간으로 모으는 것, 바로 <mark>**Nailed**</mark>입니다.
 
-> 이 저장소는 팀 프로젝트의 백엔드·프론트 소스를 포트폴리오용으로 한곳에 모아 재구성 했습니다. 실제 개발 커밋 히스토리는 팀 원본 백엔드 저장소에서 확인할 수 있습니다 → [byeongminjeong49-ui/nailed_BE](https://github.com/byeongminjeong49-ui/nailed_BE)
+> 이 저장소는 팀 프로젝트의 백엔드·프론트 소스를 포트폴리오용으로 한곳에 모아 재구성했습니다. 실제 개발 커밋 히스토리는 팀 원본 백엔드 저장소에서 확인할 수 있습니다 → [byeongminjeong49-ui/nailed_BE](https://github.com/byeongminjeong49-ui/nailed_BE)
 
-## 담당 역할
+### 🌐 배포 주소
+- [http://13.125.205.120/](http://13.125.205.120/)
+
+### 🗓️ 프로젝트 개요
+| 항목 | 내용 |
+|------|------|
+| 기간 | 2026.04 ~ 2026.06 |
+| 인원 | 3명 (도메인 기반 분담) |
+
+<br/>
+
+## 🙋 담당 역할 (My Role)
 
 상품·찜 도메인은 테이블 설계와 API를 제작했고, 관리자 기능 중 상품 관리와 신고 처리를 담당했습니다.
 
 | 도메인 | 한 일 |
-|---|---|
-| 상품 | CRUD, 복합 조건 검색·정렬, 이미지 1:N 관리, 홈 상품 조회 |
-| 찜 | 찜 등록·취소, 마이페이지 찜 목록, 상품 찜 수 동기화 |
-| 관리자 | 상품 블라인드·복구, 신고 반려·제재 처리 |
+|--------|-------|
+| **상품 (Products)** | CRUD, 복합 조건 검색·정렬, 이미지 1:N 관리, 홈 상품 조회 |
+| **찜 (Wishlist)** | 찜 등록·취소, 마이페이지 찜 목록, 상품 찜 수 동기화 |
+| **관리자 (Admin)** | 상품 블라인드·복구, 신고 반려·제재 처리 |
 
----
+<br/>
 
-## 기술 스택
+## ⚙️ 기술 스택
+
+<details>
+  <summary><h3>기술 스택 한눈에 보기</h3></summary>
 
 | 구분 | 기술 |
-|---|---|
-| Backend | Java 21, Spring Boot 3.5, Spring Data JPA (Hibernate), Spring Security + JWT, MySQL |
-| Frontend | React 19, Vite |
-| Infra | AWS EC2, Nginx |
+|------|------|
+| Language | Java, JavaScript |
+| Backend | Spring Data JPA (Hibernate), Spring Security, JWT, REST API |
+| Frontend | React |
+| Database | MySQL, DBeaver |
+| Infra & Deploy | AWS, NGINX, Docker |
+| 형상관리 & 협업 | Git, GitHub, Sourcetree |
+| 기타 도구 | FileZilla |
 
----
+</details>
 
-## 시스템 구성
+### 📌 언어 (Language)
+[![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/docs/Web/JavaScript)
+
+### 🖥️ 백엔드 (Backend)
+[![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white)](https://spring.io/projects/spring-data-jpa)
+[![Spring Security](https://img.shields.io/badge/Spring%20Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
+[![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![REST API](https://img.shields.io/badge/REST%20API-02569B?style=for-the-badge&logo=fastapi&logoColor=white)](https://developer.mozilla.org/docs/Glossary/REST)
+
+### 🎨 프론트엔드 (Frontend)
+[![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+
+### 🗄️ 데이터베이스 (Database)
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![DBeaver](https://img.shields.io/badge/DBeaver-382923?style=for-the-badge&logo=dbeaver&logoColor=white)](https://dbeaver.io/)
+
+### 🚀 배포 & 인프라 (Infra & Deploy)
+[![AWS](https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white)](https://aws.amazon.com/)
+[![NGINX](https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=nginx&logoColor=white)](https://nginx.org/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+
+### 🔧 형상관리 & 협업 (Collaboration)
+[![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)](https://git-scm.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/)
+[![Sourcetree](https://img.shields.io/badge/Sourcetree-0052CC?style=for-the-badge&logo=sourcetree&logoColor=white)](https://www.sourcetreeapp.com/)
+
+### 🛠 기타 도구 (Tools)
+[![FileZilla](https://img.shields.io/badge/FileZilla-BF0000?style=for-the-badge&logo=filezilla&logoColor=white)](https://filezilla-project.org/)
+
+<br/>
+
+## 🚧 시스템 구성
 
 ```mermaid
 flowchart LR
@@ -45,9 +99,9 @@ flowchart LR
 
 한 대의 EC2 안에서 Nginx가 React 빌드 결과물을 정적 파일로 내려주고, API 요청은 Spring Boot로 넘깁니다. 상품 이미지는 별도 스토리지 없이 서버 파일시스템에 저장하고 `/images/products/**` 경로로 서빙하는 구조로 두었습니다.
 
----
+<br/>
 
-## 담당 도메인 ERD
+## 🗃️ 담당 도메인 ERD
 
 제가 맡은 테이블을 한눈에 보기 쉽게 **상품·찜**과 **신고·제재** 두 묶음으로 나눴습니다. 여기엔 핵심 컬럼만 넣었고, 전체 컬럼은 맨 아래 접이식으로 정리해 뒀습니다.
 
@@ -126,9 +180,9 @@ erDiagram
 
 </details>
 
----
+<br/>
 
-## 담당 역할
+## ✨ 구현 내용
 
 | 영역 | 구현 내용 |
 |---|---|
@@ -140,71 +194,8 @@ erDiagram
 | 관리자 상품 | 상태별 목록 조회, 부적절 상품 블라인드·복구 |
 | 관리자 신고 | 신고 반려·제재 처리, 제재(penalty) 연동 생성 |
 
-## 프로젝트 구조
 <details>
-<summary><h3>프로젝트 구조 보기</h3></summary>
-
-```
-📁 backend/src/main/java/com/nailed/
-├── 📁 web/
-│   ├── 📁 product/                     # 상품 도메인 (담당)
-│   │   ├── 📁 controller/
-│   │   │   └── 📁 ProductController.java
-│   │   ├── 📁 service/
-│   │   │   └── 📁 ProductService.java
-│   │   ├── 📁 entity/
-│   │   │   ├── 📁 Product.java
-│   │   │   ├── 📁 ProductGroup.java     # 카테고리·브랜드 (자기참조 계층)
-│   │   │   ├── 📁 ProductImage.java
-│   │   │   └── 📁 ProductPrdSequence.java
-│   │   ├── 📁 repository/
-│   │   │   ├── 📁 ProductRepository.java        # 검색·페치조인·벌크 UPDATE
-│   │   │   ├── 📁 ProductGroupRepository.java
-│   │   │   ├── 📁 ProductImageRepository.java
-│   │   │   └── 📁 ProductPrnSequenceRepository.java
-│   │   └── 📁 dto/
-│   │       ├── 📁 ProductRequest.java
-│   │       ├── 📁 ProductResponse.java
-│   │       └── 📁 ProductSearchCondition.java   # 복합 검색 조건 객체
-│   │
-│   ├── 📁 wishlist/                    # 찜 도메인 (담당)
-│   │   ├── 📁 controller/
-│   │   │   └── 📁 WishlistController.java
-│   │   ├── 📁 service/
-│   │   │   └── 📁 WishlistService.java
-│   │   ├── 📁 entity/
-│   │   │   └── 📁 Wishlist.java
-│   │   └── 📁 repository/
-│   │       └── 📁 WishlistRepository.java
-│   │
-│   ├── 📁 admin/                       # 관리자 (상품·신고 처리 담당)
-│   │   ├── 📁 controller/
-│   │   │   ├── 📁 AdminProductController.java   # 담당
-│   │   │   ├── 📁 AdminReportController.java    # 담당
-│   │   │   └── 📁 ...                           # 대시보드·회원·주문·문의 (팀)
-│   │   └── 📁 service/
-│   │       ├── 📁 AdminProductService.java      # 담당
-│   │       ├── 📁 AdminReportService.java       # 담당
-│   │       └── 📁 ...
-│   │
-│   ├── 📁 report/                      # 신고 도메인 (담당)
-│   ├── 📁 member/                      # 회원 (팀)
-│   ├── 📁 order/                       # 주문 (팀)
-│   └── 📁 ...
-│
-└── 📁 common/                          # 팀 공통 규격
-    ├── 📁 entity/
-    ├── 📁 enums/
-    ├── 📁 exception/
-    ├── 📁 response/
-    └── 📁 util/
-```
-</details>
-
-## 주요 API
-
-<details>
-<summary><h2>Backend API</h2></summary>
+<summary><h3>주요 API</h3></summary>
 
 | 메서드 | 경로 | 설명 |
 |---|---|---|
@@ -224,35 +215,36 @@ erDiagram
 
 </details>
 
-## 기능별로 신경 쓴 점
+<details>
+<summary><h3>기능별로 신경 쓴 점</h3></summary>
 
-<h3>검색 조건의 확장을 전제로 설계했습니다.</h3>
+**검색 조건의 확장을 전제로 설계했습니다.**
 초기에는 키워드만 받았으나 카테고리·가격대·사이즈·컨디션·판매완료 제외까지 조건이 추가됐습니다. 메서드 파라미터를 개별로 늘리는 대신 `ProductSearchCondition` 객체로 묶어 전달하도록 했고, 조건이 추가돼도 컨트롤러·서비스·리포지토리의 시그니처가 바뀌지 않습니다.
 
-<h3>인기순 정렬에 찜 수를 가중 반영했습니다.</h3> 
-단순 조회보다 찜이 더 강한 관심 지표라고 판단해 `view_count + wishlist_count * 3` 점수로 정렬합니다. 가중치 3배는 데이터로 검증한 값이 아니라 임의로 설정한 값이며, 이 부분은 아래 회고에 남겨 뒀습니다.
+**인기순 정렬에 찜 수를 가중 반영했습니다.**
+단순 조회보다 찜이 더 강한 관심 지표라고 판단해 `view_count + wishlist_count * 3` 점수로 정렬합니다. 가중치 3배는 데이터로 검증한 값이 아니라 임의로 설정한 값이며, 이 부분은 아래 트러블슈팅에 남겨 뒀습니다.
 
-<h3>이미지 업로드 시점에는 파일명에 쓸 상품 번호가 없습니다.</h3>
+**이미지 업로드 시점에는 파일명에 쓸 상품 번호가 없습니다.**
 이미지는 상품이 저장되기 전에 업로드되므로 상품 PK를 파일명에 쓸 수 없습니다. 업로드 단계에서는 UUID 임시 파일명으로 저장하고, 상품 등록이 확정되는 시점에 별도 시퀀스 테이블(`ProductPrdSequence`)에서 번호를 발급받아 `PRD_{시퀀스}_{순번}` 형태로 리네이밍하는 2단계 방식으로 처리했습니다. 상품과 이미지는 1:N 관계로 두고 `cascade`·`orphanRemoval`을 적용해, 상품 수정 시 이미지 교체·삭제가 함께 반영됩니다.
 
-<h3>삭제는 소프트 삭제로 처리했습니다.</h3>
+**삭제는 소프트 삭제로 처리했습니다.**
 상품은 주문·신고 등 다른 데이터와 참조 관계가 있어 물리 삭제가 위험합니다. 상태를 `DELETED`로 변경하고 삭제 사유와 시각을 기록하며, 이 설계 덕분에 관리자가 블라인드한 상품을 복구할 수 있습니다.
 
-<h3>신고는 상태 전이를 제한했습니다.</h3>
+**신고는 상태 전이를 제한했습니다.**
 접수(APPROVED)에서 반려(REJECTED) 또는 제재완료(DONE)로만 전이되며, 제재 시 대상 회원에게 경고/정지/영구정지 penalty를 함께 생성합니다. 접수 상태가 아닌 신고는 처리되지 않도록 방어 로직을 두어 중복 제재를 차단했습니다.
 
 공통 규격(응답 포맷, 전역 예외 처리, 공통 엔티티)은 팀에서 정한 규약을 따랐습니다.
 
----
+</details>
 
-## 💣 트러블슈팅
+<br/>
+
+## 💣 트러블 슈팅
 
 ### 상품 상세에서 쿼리가 너무 많이 나가던 문제
 
-상품 상세를 열 때 연관 엔티티를 전부 페치 조인으로 합치지 않고 일부는 따로 뒀습니다.
-
 <details>
-<summary>1. 문제점</summary>
+<summary>1. 문제점 (Problem)</summary>
 
 <br>
 
@@ -261,7 +253,7 @@ erDiagram
 </details>
 
 <details>
-<summary>2. 원인</summary>
+<summary>2. 원인 (Cause)</summary>
 
 <br>
 
@@ -270,7 +262,7 @@ erDiagram
 </details>
 
 <details>
-<summary>3. 해결 과정</summary>
+<summary>3. 해결 과정 (Solution)</summary>
 
 <br>
 
@@ -291,7 +283,7 @@ SELECT p FROM Product p
 </details>
 
 <details>
-<summary>4. 결과 및 배운 점</summary>
+<summary>4. 결과 및 배운 점 (Result & Learnings)</summary>
 
 <br>
 
@@ -299,12 +291,12 @@ SELECT p FROM Product p
 
 </details>
 
----
+<br/>
 
 ### 조회수·찜 수가 동시 요청에서 어긋날 수 있던 문제
 
 <details>
-<summary>1. 문제점</summary>
+<summary>1. 문제점 (Problem)</summary>
 
 <br>
 
@@ -313,7 +305,7 @@ SELECT p FROM Product p
 </details>
 
 <details>
-<summary>2. 원인</summary>
+<summary>2. 원인 (Cause)</summary>
 
 <br>
 
@@ -322,7 +314,7 @@ SELECT p FROM Product p
 </details>
 
 <details>
-<summary>3. 해결 과정</summary>
+<summary>3. 해결 과정 (Solution)</summary>
 
 <br>
 
@@ -338,7 +330,7 @@ UPDATE Product p SET p.wishlistCount = p.wishlistCount - 1
 </details>
 
 <details>
-<summary>4. 결과 및 배운 점</summary>
+<summary>4. 결과 및 배운 점 (Result & Learnings)</summary>
 
 <br>
 
@@ -346,6 +338,24 @@ UPDATE Product p SET p.wishlistCount = p.wishlistCount - 1
 
 </details>
 
----
+<br/>
 
+## 🏗️ 프로젝트 구조
 
+<details>
+  <summary><h3>프로젝트 구조 보기</h3></summary>
+
+```
+backend/src/main/java/com/nailed/
+├── web/
+│   ├── product/       # 상품 도메인 - CRUD, 검색·정렬, 이미지 (담당)
+│   ├── wishlist/      # 찜 도메인 - 등록/취소, 찜 수 동기화 (담당)
+│   ├── admin/         # 관리자 - 상품 블라인드, 신고 처리 (담당 영역 포함)
+│   ├── report/        # 신고 도메인 (담당)
+│   ├── member/        # 회원 (팀)
+│   ├── order/         # 주문 (팀)
+│   └── ...
+└── common/            # 응답 포맷, 예외 처리 등 공통 규격
+```
+
+</details>
