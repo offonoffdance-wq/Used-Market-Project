@@ -178,6 +178,7 @@ erDiagram
 ```
 
 <details>
+  
 <summary><h3>전체 컬럼 상세 스키마</h3></summary>
 | 테이블 | 주요 컬럼 |
 |---|---|
@@ -187,6 +188,7 @@ erDiagram
 | wishlists | wishlist_id(PK), member_id·product_id(FK), UNIQUE(member_id, product_id) |
 | reports | report_id(PK, RPT_001), reporter_id·target_member_id(FK), reason_code(FRAUD/MISLEADING_INFO/PROHIBITED_ITEM/ETC), detail, report_status(APPROVED/REJECTED/DONE), processed_reason, processed_at |
 | member_penalties | penalty_id(PK), member_id·report_id(FK), penalty_type(WARNING/SUSPEND/BAN), penalty_days(3/7/30), reason, starts_at, ends_at |
+
 </details>
 
 <h3>주요 기능</h3>
