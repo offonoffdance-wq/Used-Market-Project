@@ -12,6 +12,7 @@
 | 기간 | 2026.04 ~ 2026.06 |
 | 인원 | 3명 (도메인 기반 분담) |
 | 배포 주소 | [http://13.125.205.120/](http://13.125.205.120/) |
+| 테스트 계정 | ID: `wnsdn929` / PW: `qwer1234!` |
 | 원본 백엔드 저장소 | [byeongminjeong49-ui/nailed_BE](https://github.com/byeongminjeong49-ui/nailed_BE) (실제 개발 커밋 히스토리) |
 
 <br/>
