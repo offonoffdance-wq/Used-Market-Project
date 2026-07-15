@@ -35,7 +35,7 @@
 </table>
 
 <details>
-<summary><h2>✦ 주요 API</h2></summary>
+<summary><h2>✧ 주요 API</h2></summary>
 
 | 메서드 | 경로 | 설명 |
 |---|---|---|
@@ -111,7 +111,7 @@ flowchart LR
 
 <br/>
 
-## 프로젝트 구조
+## 🛠 프로젝트 구조
 
 <details>
   <summary><h3>프로젝트 구조 보기</h3></summary>
