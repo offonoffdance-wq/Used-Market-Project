@@ -165,17 +165,89 @@ erDiagram
         int penalty_days
     }
 ```
-
 <details>
-  
-<summary><h3>전체 컬럼 상세 스키마</h3></summary>
-| 테이블 | 주요 컬럼 |
-| products | product_id(PK), seller_id·category_id·brand_id(FK), title, price, shipping_fee, condition_code(S~D), product_status(ON_SALE/SOLD/DELETED), view_count, wishlist_count, deleted_reason, deleted_at |
-| product_groups | group_id(PK), group_type(CATEGORY/BRAND), parent_id(FK, 자기참조), code(UK), name, size_type |
-| product_images | image_id(PK), product_id(FK), image_url, sort_order(0=대표) |
-| wishlists | wishlist_id(PK), member_id·product_id(FK), UNIQUE(member_id, product_id) |
-| reports | report_id(PK, RPT_001), reporter_id·target_member_id(FK), reason_code(FRAUD/MISLEADING_INFO/PROHIBITED_ITEM/ETC), detail, report_status(APPROVED/REJECTED/DONE), processed_reason, processed_at |
-| member_penalties | penalty_id(PK), member_id·report_id(FK), penalty_type(WARNING/SUSPEND/BAN), penalty_days(3/7/30), reason, starts_at, ends_at |
+<summary>주요 테이블 구조 보기</summary>
+
+### `products` — 상품
+
+| 컬럼 | 타입 / 제약 | 설명 |
+|------|-------------|------|
+| `product_id` | BIGINT, PK, AUTO | 상품 식별자 |
+| `seller_id` | BIGINT, FK→members, NOT NULL | 판매자 |
+| `category_id` | BIGINT, FK→product_groups, NOT NULL | 카테고리(필수) |
+| `brand_id` | BIGINT, FK→product_groups | 브랜드(선택) |
+| `title` | VARCHAR(100), NOT NULL | 상품명 |
+| `price` | INT, NOT NULL | 가격 |
+| `shipping_fee` | INT, NOT NULL | 배송비 |
+| `description` | TEXT, NOT NULL | 상세 설명 |
+| `condition_code` | ENUM(S/A/B/C/D), NOT NULL | 상품 상태 등급 |
+| `shipping_method` | VARCHAR(20), NOT NULL | 배송 방법(기본 `DELIVERY`) |
+| `size` | VARCHAR(30) | 사이즈 |
+| `product_status` | ENUM(ON_SALE/SOLD/DELETED), NOT NULL | 판매 상태 |
+| `hashtags` | VARCHAR(500) | 해시태그(쉼표 구분) |
+| `view_count` | INT, NOT NULL | 조회수 |
+| `wishlist_count` | INT, NOT NULL | 찜수 |
+| `deleted_reason` | VARCHAR(500) | 삭제 사유 |
+| `created_at / updated_at / deleted_at` | DATETIME | 소프트 삭제(자동 관리) |
+
+### `product_groups` — 카테고리 / 브랜드 (자기참조 계층)
+
+| 컬럼 | 타입 / 제약 | 설명 |
+|------|-------------|------|
+| `group_id` | BIGINT, PK, AUTO | 그룹 식별자 |
+| `group_type` | ENUM(CATEGORY/BRAND), NOT NULL | 카테고리/브랜드 구분 |
+| `parent_id` | BIGINT, FK→product_groups(자기참조) | 상위 그룹(최상위·브랜드는 null) |
+| `code` | VARCHAR(50), NOT NULL, UNIQUE | 식별 코드(예: `CLOTHES_TOP`, `NIKE`) |
+| `name` | VARCHAR(100), NOT NULL | 화면 표시명 |
+| `sort_order` | INT | 정렬 순서 |
+| `size_type` | VARCHAR(20) | 사이즈 유형 |
+
+### `product_images` — 상품 이미지 (상품과 1:N)
+
+| 컬럼 | 타입 / 제약 | 설명 |
+|------|-------------|------|
+| `image_id` | BIGINT, PK, AUTO | 이미지 식별자 |
+| `product_id` | BIGINT, FK→products, NOT NULL | 소속 상품(`cascade delete` + `orphan removal`) |
+| `image_url` | VARCHAR(500), NOT NULL | 이미지 경로 |
+| `sort_order` | INT, NOT NULL | 표시 순서(`0` = 대표) |
+| `created_at` | DATETIME | 생성 시각 |
+
+### `wishlists` — 찜
+
+| 컬럼 | 타입 / 제약 | 설명 |
+|------|-------------|------|
+| `wishlist_id` | BIGINT, PK, AUTO | 찜 식별자 |
+| `member_id` | BIGINT, FK→members, NOT NULL | 찜한 회원 |
+| `product_id` | BIGINT, FK→products, NOT NULL | 찜한 상품 |
+| — | UNIQUE(`member_id`, `product_id`) | 중복 찜 방지 |
+
+### `reports` — 신고
+
+| 컬럼 | 타입 / 제약 | 설명 |
+|------|-------------|------|
+| `report_id` | VARCHAR(20), PK | 애플리케이션 생성(예: `RPT_001`) |
+| `reporter_id` | BIGINT, FK→members, NOT NULL | 신고자 |
+| `reason_code` | ENUM(FRAUD/MISLEADING_INFO/PROHIBITED_ITEM/ETC), NOT NULL | 신고 사유 |
+| `detail` | VARCHAR(500) | 상세 내용(선택) |
+| `target_member_id` | BIGINT, FK→members, NOT NULL | 피신고 회원 |
+| `report_status` | ENUM(APPROVED/REJECTED/DONE), NOT NULL | 처리 상태 |
+| `processed_reason` | VARCHAR(500) | 관리자 처리 사유 |
+| `processed_at` | DATETIME | 처리 일시 |
+| `created_at` | DATETIME | 접수 시각 |
+
+### `member_penalties` — 회원 제재
+
+| 컬럼 | 타입 / 제약 | 설명 |
+|------|-------------|------|
+| `penalty_id` | BIGINT, PK, AUTO | 제재 식별자 |
+| `member_id` | BIGINT, FK→members, NOT NULL | 제재 대상 회원 |
+| `penalty_type` | ENUM(WARNING/SUSPEND/BAN), NOT NULL | 제재 유형 |
+| `penalty_days` | INT | 제재 일수(3/7/30) |
+| `reason` | VARCHAR(500), NOT NULL | 제재 사유 |
+| `report_id` | VARCHAR(20), FK→reports | 연관 신고 |
+| `starts_at` | DATETIME | 제재 시작 |
+| `ends_at` | DATETIME | 제재 종료 |
+| `created_at` | DATETIME | 생성 시각 |
 
 </details>
 
