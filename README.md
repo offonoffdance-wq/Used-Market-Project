@@ -35,7 +35,7 @@
 </table>
 
 <details>
-<summary><h3>주요 API</h3></summary>
+<summary><h2>주요 API</h2></summary>
 
 | 메서드 | 경로 | 설명 |
 |---|---|---|
