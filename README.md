@@ -59,7 +59,7 @@
 
 </details>
 
-## ⌘ 기술 스택
+## ⌬ 기술 스택
 
 <details>
   <summary><h3>기술 스택 모음</h3></summary>
