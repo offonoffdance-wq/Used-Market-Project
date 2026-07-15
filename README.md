@@ -193,7 +193,7 @@ erDiagram
     }
 ```
 <details>
-<summary>주요 테이블 구조 보기</summary>
+<summary><h3>주요 테이블 구조 보기</h3></summary>
 
 ### `products` — 상품
 
