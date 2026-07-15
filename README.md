@@ -190,7 +190,7 @@ erDiagram
 | `deleted_reason` | VARCHAR(500) | 삭제 사유 |
 | `created_at / updated_at / deleted_at` | DATETIME | 소프트 삭제(자동 관리) |
 
-### `product_groups` — 카테고리 / 브랜드 (자기참조 계층)
+### `product_groups` — 카테고리 / 브랜드 
 
 | 컬럼 | 타입 / 제약 | 설명 |
 |------|-------------|------|
@@ -202,7 +202,7 @@ erDiagram
 | `sort_order` | INT | 정렬 순서 |
 | `size_type` | VARCHAR(20) | 사이즈 유형 |
 
-### `product_images` — 상품 이미지 (상품과 1:N)
+### `product_images` — 상품 이미지
 
 | 컬럼 | 타입 / 제약 | 설명 |
 |------|-------------|------|
