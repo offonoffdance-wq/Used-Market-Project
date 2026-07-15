@@ -13,7 +13,7 @@
 
 ## ⌬ 담당 기능 (Backend)
 
-상품(Product)·찜(Wishlist)·리뷰(Review)·신고(Report) 도메인의 <b>테이블 설계 및 API 개발</b>을 담당
+상품(Product)·찜(Wishlist)·리뷰(Review)·신고(Report) **도메인**의 <b>테이블 설계 및 API 개발</b>을 담당
 
 <table>
   <tr>
