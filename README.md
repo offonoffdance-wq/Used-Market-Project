@@ -134,8 +134,6 @@ backend/src/main/java/com/nailed/
 
 </details>
 
-<br/>
-
 ## 담당 도메인 ERD
 
 ```mermaid
