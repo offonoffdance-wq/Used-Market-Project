@@ -111,7 +111,7 @@ flowchart LR
 
 <br/>
 
-## 🛠 프로젝트 구조
+## 프로젝트 구조
 
 <details>
   <summary><h3>프로젝트 구조 보기</h3></summary>
