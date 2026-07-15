@@ -34,6 +34,27 @@
   </tr>
 </table>
 
+<details>
+<summary><h3>주요 API</h3></summary>
+
+| 메서드 | 경로 | 설명 |
+|---|---|---|
+| GET | /api/products | 상품 목록 (카테고리·가격·사이즈·컨디션 필터, 페이징) |
+| GET | /api/products/search | 키워드 검색 |
+| GET | /api/products/{id} | 상품 상세 |
+| POST | /api/products/image-upload | 이미지 임시 업로드 (다중) |
+| POST | /api/products | 상품 등록 |
+| PUT | /api/products/{id} | 상품 수정 |
+| DELETE | /api/products/{id} | 상품 소프트 삭제 |
+| POST | /api/products/{id}/view | 조회수 증가 |
+| GET | /api/products/popular | 인기 TOP (가중치 정렬) |
+| GET | /api/products/{id}/related | 연관 상품 |
+| POST | /api/products/{id}/wishlist | 찜 등록 |
+| DELETE | /api/products/{id}/wishlist | 찜 취소 |
+| GET | /api/members/mypage/wishlist | 내 찜 목록 |
+
+</details>
+
 ## ⌘ 기술 스택
 
 <details>
@@ -289,26 +310,6 @@ erDiagram
 - **상품 블라인드** — 부적절한 상품 숨김 처리, 문제 해결 시 복구
 - **신고 처리** — 접수된 신고를 반려하거나 제재로 확정
 - **회원 제재** — 악성 이용자 경고 · 이용 정지
-<details>
-<summary><h3>주요 API</h3></summary>
-
-| 메서드 | 경로 | 설명 |
-|---|---|---|
-| GET | /api/products | 상품 목록 (카테고리·가격·사이즈·컨디션 필터, 페이징) |
-| GET | /api/products/search | 키워드 검색 |
-| GET | /api/products/{id} | 상품 상세 |
-| POST | /api/products/image-upload | 이미지 임시 업로드 (다중) |
-| POST | /api/products | 상품 등록 |
-| PUT | /api/products/{id} | 상품 수정 |
-| DELETE | /api/products/{id} | 상품 소프트 삭제 |
-| POST | /api/products/{id}/view | 조회수 증가 |
-| GET | /api/products/popular | 인기 TOP (가중치 정렬) |
-| GET | /api/products/{id}/related | 연관 상품 |
-| POST | /api/products/{id}/wishlist | 찜 등록 |
-| DELETE | /api/products/{id}/wishlist | 찜 취소 |
-| GET | /api/members/mypage/wishlist | 내 찜 목록 |
-
-</details>
 
 ## ⌬ 기능별로 신경 쓴 점
 
